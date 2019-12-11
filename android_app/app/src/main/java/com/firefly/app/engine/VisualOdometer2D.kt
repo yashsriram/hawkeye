@@ -1,9 +1,6 @@
 package com.firefly.app.engine
 
-import koma.PI
-import koma.atan2
-import koma.cos
-import koma.create
+import koma.*
 import koma.extensions.forEachIndexed
 import koma.extensions.mapIndexed
 import koma.matrix.Matrix
@@ -13,13 +10,12 @@ import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.system.exitProcess
 
 class Status(
     val state: Int,
     val dx: Double,
     val dy: Double,
-    val thetaInDegrees: Double,
+    val angleInDegrees: Double,
     val numMatches: Int
 )
 
@@ -42,6 +38,7 @@ class VisualOdometer2D(
     private var anchorFrame = Mat()
     private var anchorFrameKeyPoints = MatOfKeyPoint()
     private var anchorFrameDescriptors = MatOfKeyPoint()
+    private var prevStatus = Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0)
 
     init {
         assert(ANCHOR_FRAME_MATCHES_THRESHOLD > 0)
@@ -130,14 +127,24 @@ class VisualOdometer2D(
                 B.add(newFrameGoodKeyPoint.x)
                 B.add(newFrameGoodKeyPoint.y)
             }
+            // Calculate rotation and translation
             val matA = create(A.toDoubleArray(), goodMatchesList.size, 2)
             val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
-            val thetaInDegrees = getRotationInDegrees(matA, matB)
-            Arrays.sort(dxs)
-            Arrays.sort(dys)
-            val dx = -median(dxs)
-            val dy = median(dys)
-            return Status(NEW_FRAME_MATCHED, dx, dy, thetaInDegrees, goodMatchesList.size)
+            val RT = getRotationInDegrees(matA, matB)
+            val angleInDegrees = getAngleInDegreesFromR(RT.first)
+            var dx = prevStatus.dx
+            var dy = prevStatus.dy
+            // Stop translating if huge changes in angle (Heuristic)
+            if (abs(prevStatus.angleInDegrees - angleInDegrees) < 1) {
+                Arrays.sort(dxs)
+                Arrays.sort(dys)
+                dx = -median(dxs)
+                dy = median(dys)
+            }
+            // Update prev status
+            val newStatus = Status(NEW_FRAME_MATCHED, dx, dy, angleInDegrees, goodMatchesList.size)
+            prevStatus = newStatus
+            return newStatus
         }
     }
 
@@ -157,26 +164,46 @@ class VisualOdometer2D(
         )
     }
 
-    private fun moveToCentroid(mat: Matrix<Double>): Matrix<Double> {
-        val matCentroid = getCentroid(mat)
+    private fun moveToCentroid(
+        mat: Matrix<Double>,
+        centroid: Pair<Double, Double>
+    ): Matrix<Double> {
         val matMinusCentroid = mat.mapIndexed { row, col, element ->
             if (col == 0) {
-                element - matCentroid.first
+                element - centroid.first
             } else {
-                element - matCentroid.second
+                element - centroid.second
             }
         }
         return matMinusCentroid
     }
 
-    private fun getRotationInDegrees(matA: Matrix<Double>, matB: Matrix<Double>): Double {
-        val matAMinusCentroid = moveToCentroid(matA)
-        val matBMinusCentroid = moveToCentroid(matB)
-        val H = matAMinusCentroid.T * matBMinusCentroid
+    private fun getRotationInDegrees(
+        A: Matrix<Double>,
+        B: Matrix<Double>
+    ): Pair<Matrix<Double>, Matrix<Double>> {
+        // Centroid
+        val ACentroid = getCentroid(A)
+        val BCentroid = getCentroid(B)
+        // Move to centroid
+        val AMinusCentroid = moveToCentroid(A, ACentroid)
+        val BMinusCentroid = moveToCentroid(B, BCentroid)
+        // H, SVD
+        val H = AMinusCentroid.T * BMinusCentroid
         val USV = H.SVD()
         val U = USV.first
         val V = USV.third
+        // R, T calculation
         val R = V * U.T
+        val ACentroidM = mat[ACentroid.first end
+                ACentroid.second]
+        val BCentroidM = mat[BCentroid.first end
+                BCentroid.second]
+        val T = BCentroidM - R * ACentroidM
+        return Pair(R, T)
+    }
+
+    private fun getAngleInDegreesFromR(R: Matrix<Double>): Double {
         val cosTheta = R.getDouble(0, 0)
         val sinTheta = R.getDouble(1, 0)
         val theta = atan2(sinTheta, cosTheta)

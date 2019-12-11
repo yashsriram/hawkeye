@@ -11,7 +11,6 @@ import org.opencv.core.Mat
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
-import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
@@ -92,7 +91,7 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                 SocketHolder.send("${status.dx.roundToInt()} ${status.dy.roundToInt()}")
                 statusView.post {
                     statusView.text =
-                        "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.thetaInDegrees.roundToInt()}\n #matches = ${status.numMatches}"
+                        "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}"
                 }
             }
             VisualOdometer2D.FOUND_ANCHOR -> {

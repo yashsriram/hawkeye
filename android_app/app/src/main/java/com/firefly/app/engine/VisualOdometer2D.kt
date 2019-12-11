@@ -8,7 +8,6 @@ import org.opencv.core.*
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
-import java.util.*
 import kotlin.collections.ArrayList
 
 class Status(
@@ -132,15 +131,8 @@ class VisualOdometer2D(
             val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
             val RT = getRotationInDegrees(matA, matB)
             val angleInDegrees = getAngleInDegreesFromR(RT.first)
-            var dx = prevStatus.dx
-            var dy = prevStatus.dy
-            // Stop translating if huge changes in angle (Heuristic)
-            if (abs(prevStatus.angleInDegrees - angleInDegrees) < 1) {
-                Arrays.sort(dxs)
-                Arrays.sort(dys)
-                dx = -median(dxs)
-                dy = median(dys)
-            }
+            val dx = RT.second.getDouble(0, 0)
+            val dy = RT.second.getDouble(0, 1)
             // Update prev status
             val newStatus = Status(NEW_FRAME_MATCHED, dx, dy, angleInDegrees, goodMatchesList.size)
             prevStatus = newStatus
@@ -148,7 +140,7 @@ class VisualOdometer2D(
         }
     }
 
-    private fun getCentroid(mat: Matrix<Double>): Pair<Double, Double> {
+    private fun meanByColumns(mat: Matrix<Double>): Pair<Double, Double> {
         var cx = 0.0
         var cy = 0.0
         mat.forEachIndexed { row, col, element ->
@@ -164,7 +156,7 @@ class VisualOdometer2D(
         )
     }
 
-    private fun moveToCentroid(
+    private fun subtract(
         mat: Matrix<Double>,
         centroid: Pair<Double, Double>
     ): Matrix<Double> {
@@ -179,27 +171,25 @@ class VisualOdometer2D(
     }
 
     private fun getRotationInDegrees(
-        A: Matrix<Double>,
-        B: Matrix<Double>
+        endCoordinatedA: Matrix<Double>,
+        endCoordinatedB: Matrix<Double>
     ): Pair<Matrix<Double>, Matrix<Double>> {
         // Centroid
-        val ACentroid = getCentroid(A)
-        val BCentroid = getCentroid(B)
-        // Move to centroid
-        val AMinusCentroid = moveToCentroid(A, ACentroid)
-        val BMinusCentroid = moveToCentroid(B, BCentroid)
+        val actualOrigin = Pair(352.0 / 2, 288.0 / 2)
+        val A = subtract(endCoordinatedA, actualOrigin)
+        val B = subtract(endCoordinatedB, actualOrigin)
+        val ACentroid = meanByColumns(A)
+        val BCentroid = meanByColumns(B)
         // H, SVD
-        val H = AMinusCentroid.T * BMinusCentroid
+        val H = subtract(A, ACentroid).T * subtract(B, BCentroid)
         val USV = H.SVD()
         val U = USV.first
         val V = USV.third
         // R, T calculation
         val R = V * U.T
-        val ACentroidM = mat[ACentroid.first end
-                ACentroid.second]
-        val BCentroidM = mat[BCentroid.first end
-                BCentroid.second]
-        val T = BCentroidM - R * ACentroidM
+        val rotatedA = (R * A.T).T
+        val TAsPair = meanByColumns(B - rotatedA)
+        val T = mat[TAsPair.first, TAsPair.second]
         return Pair(R, T)
     }
 

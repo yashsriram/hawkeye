@@ -1,9 +1,13 @@
 import socket
 import matplotlib.pyplot as plt
 from socket_station import SocketStation
+import sys
 
-host = '192.168.1.10'
-port = 8000
+if len(sys.argv) != 3:
+    print('Usage: {} <hostip> <hostport>'.format(sys.argv[0]))
+    exit(-1)
+host = sys.argv[1]
+port = int(sys.argv[2])
 
 s = socket.socket()
 s.bind((host, port))

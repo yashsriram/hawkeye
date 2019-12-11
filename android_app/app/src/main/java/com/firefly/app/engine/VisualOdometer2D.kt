@@ -1,16 +1,25 @@
 package com.firefly.app.engine
 
+import koma.PI
+import koma.atan2
+import koma.cos
+import koma.create
+import koma.extensions.forEachIndexed
+import koma.extensions.mapIndexed
+import koma.matrix.Matrix
 import org.opencv.core.*
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class Status(
     val state: Int,
     val dx: Double,
     val dy: Double,
+    val thetaInDegrees: Double,
     val numMatches: Int
 )
 
@@ -63,11 +72,11 @@ class VisualOdometer2D(
         featureDetector.detect(frame1, anchorFrameKeyPoints)
         val numKPs = anchorFrameKeyPoints.toList().size
         if (numKPs < ANCHOR_FRAME_MATCHES_THRESHOLD) {
-            return Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0)
+            return Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0)
         } else {
             descriptorExtractor.compute(frame1, anchorFrameKeyPoints, anchorFrameDescriptors)
             this.anchorFrame = frame1.clone()
-            return Status(FOUND_ANCHOR, 0.0, 0.0, numKPs)
+            return Status(FOUND_ANCHOR, 0.0, 0.0, 0.0, numKPs)
         }
     }
 
@@ -101,25 +110,78 @@ class VisualOdometer2D(
         }
         if (goodMatchesList.size < ANCHOR_TO_NEW_FRAME_MATCHES_THRESHOLD) {
             // If good matches are too less => anchor image found
-            return Status(NEW_FRAME_NOT_MATCHED, 0.0, 0.0, 0)
+            return Status(NEW_FRAME_NOT_MATCHED, 0.0, 0.0, 0.0, 0)
         } else {
             // Get good keypoints from good matches
             val anchorFrameKeyPointsList = anchorFrameKeyPoints.toList()
             val newFrameKeyPointsList = newFrameKeyPoints.toList()
             val dxs = DoubleArray(goodMatchesList.size)
             val dys = DoubleArray(goodMatchesList.size)
+            val A = arrayListOf<Double>()
+            val B = arrayListOf<Double>()
             for (i in 0 until goodMatchesList.size) {
-                val f1GoodKeyPoint = anchorFrameKeyPointsList[goodMatchesList[i].queryIdx].pt
-                val f2GoodKeyPoint = newFrameKeyPointsList[goodMatchesList[i].trainIdx].pt
-                dxs[i] = f2GoodKeyPoint.x - f1GoodKeyPoint.x
-                dys[i] = f2GoodKeyPoint.y - f1GoodKeyPoint.y
+                val anchorFrameGoodKeyPoint =
+                    anchorFrameKeyPointsList[goodMatchesList[i].queryIdx].pt
+                val newFrameGoodKeyPoint = newFrameKeyPointsList[goodMatchesList[i].trainIdx].pt
+                dxs[i] = newFrameGoodKeyPoint.x - anchorFrameGoodKeyPoint.x
+                dys[i] = newFrameGoodKeyPoint.y - anchorFrameGoodKeyPoint.y
+                A.add(anchorFrameGoodKeyPoint.x)
+                A.add(anchorFrameGoodKeyPoint.y)
+                B.add(newFrameGoodKeyPoint.x)
+                B.add(newFrameGoodKeyPoint.y)
             }
+            val matA = create(A.toDoubleArray(), goodMatchesList.size, 2)
+            val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
+            val thetaInDegrees = getRotationInDegrees(matA, matB)
             Arrays.sort(dxs)
             Arrays.sort(dys)
             val dx = -median(dxs)
             val dy = median(dys)
-            return Status(NEW_FRAME_MATCHED, dx, dy, goodMatchesList.size)
+            return Status(NEW_FRAME_MATCHED, dx, dy, thetaInDegrees, goodMatchesList.size)
         }
+    }
+
+    private fun getCentroid(mat: Matrix<Double>): Pair<Double, Double> {
+        var cx = 0.0
+        var cy = 0.0
+        mat.forEachIndexed { row, col, element ->
+            if (col == 0) {
+                cx += element
+            } else if (col == 1) {
+                cy += element
+            }
+        }
+        return Pair(
+            cx / mat.numRows(),
+            cy / mat.numRows()
+        )
+    }
+
+    private fun moveToCentroid(mat: Matrix<Double>): Matrix<Double> {
+        val matCentroid = getCentroid(mat)
+        val matMinusCentroid = mat.mapIndexed { row, col, element ->
+            if (col == 0) {
+                element - matCentroid.first
+            } else {
+                element - matCentroid.second
+            }
+        }
+        return matMinusCentroid
+    }
+
+    private fun getRotationInDegrees(matA: Matrix<Double>, matB: Matrix<Double>): Double {
+        val matAMinusCentroid = moveToCentroid(matA)
+        val matBMinusCentroid = moveToCentroid(matB)
+        val H = matAMinusCentroid.T * matBMinusCentroid
+        val USV = H.SVD()
+        val U = USV.first
+        val V = USV.third
+        val R = V * U.T
+        val cosTheta = R.getDouble(0, 0)
+        val sinTheta = R.getDouble(1, 0)
+        val theta = atan2(sinTheta, cosTheta)
+        val thetaInDegrees = theta * 180 / PI
+        return thetaInDegrees
     }
 
     private fun median(numArray: DoubleArray): Double {

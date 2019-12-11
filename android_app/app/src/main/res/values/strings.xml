@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FireFly</string>
+    <string name="connect_help">Start firefly listener in your computer. The ip address and port correspond to ip address and port on which the listener listens.</string>
+    <string name="port">port</string>
+    <string name="ip_address">ip address</string>
+    <string name="connect_to_a_computer">Connect to a computer</string>
+    <string name="tethered_visual_odometer">Tethered Visual Odometer</string>
+    <string name="untethered_visual_odometer">Untethered Visual Odometer</string>
+    <string name="untethered_inertial_odometer">Untethered Inertial Odometer</string>
+</resources>

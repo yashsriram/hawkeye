@@ -89,7 +89,7 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
         val status = visualOdometer2D!!.feed(inputImg)
         when (status.state) {
             VisualOdometer2D.NEW_FRAME_MATCHED -> {
-                SocketHolder.send("${status.dx} ${status.dy}")
+                SocketHolder.send("${status.dx.roundToInt()} ${status.dy.roundToInt()}")
                 statusView.post {
                     statusView.text =
                         "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n #matches = ${status.numMatches}"
@@ -102,7 +102,7 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                     Bitmap.Config.ARGB_8888
                 )
                 Utils.matToBitmap(inputImg, anchorBitMap)
-                anchorImageView.post({ anchorImageView.setImageBitmap(anchorBitMap) })
+                anchorImageView.post { anchorImageView.setImageBitmap(anchorBitMap) }
                 SocketHolder.send("reset")
                 statusView.post { statusView.text = "Found Anchor Image" }
             }

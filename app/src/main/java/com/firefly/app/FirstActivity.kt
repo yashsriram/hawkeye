@@ -14,31 +14,21 @@ class FirstActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first)
-        // tetheredVisualOdometerBtn
-        tetheredVisualOdometerBtn.setOnClickListener({
+
+        tetheredVisualOdometerBtn.setOnClickListener {
             val ipAddress = screenIPAddressView.text.toString()
             val port = screenPortView.text.toString()
             ConnectToComputerTask().execute(ipAddress, port)
-        })
-        // untetheredVisualOdometerBtn
-        untetheredVisualOdometerBtn.setOnClickListener({
+        }
+
+        untetheredVisualOdometerBtn.setOnClickListener {
             SocketHolder.bypass()
-            goToVisualOdometerActivity()
-        })
-        // gotoInertialOdometerBtn
-        gotoInertialOdometerBtn.setOnClickListener({
-            goToInertialOdometerActivity()
-        })
-    }
+            startActivity(Intent(this@FirstActivity, VisualOdometerActivity::class.java))
+        }
 
-    fun goToVisualOdometerActivity() {
-        val activity = Intent(this@FirstActivity, VisualOdometerActivity::class.java)
-        startActivity(activity)
-    }
-
-    fun goToInertialOdometerActivity() {
-        val activity = Intent(this@FirstActivity, InertialOdometerActivity::class.java)
-        startActivity(activity)
+        gotoInertialOdometerBtn.setOnClickListener {
+            startActivity(Intent(this@FirstActivity, InertialOdometerActivity::class.java))
+        }
     }
 
     private inner class ConnectToComputerTask : AsyncTask<String, String, Int>() {
@@ -63,7 +53,7 @@ class FirstActivity : AppCompatActivity() {
                     "Connected to firefly listener",
                     Toast.LENGTH_SHORT
                 ).show()
-                goToVisualOdometerActivity()
+                startActivity(Intent(this@FirstActivity, VisualOdometerActivity::class.java))
             } else {
                 Toast.makeText(
                     this@FirstActivity,

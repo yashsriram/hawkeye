@@ -24,7 +24,9 @@ class VisualOdometer2D(
     private val descriptorMatcher: DescriptorMatcher,
     private val ANCHOR_FRAME_MATCHES_THRESHOLD: Int,
     private val ANCHOR_TO_NEW_FRAME_MATCHES_THRESHOLD: Int,
-    private val NN_DIST_RATIO: Double
+    private val NN_DIST_RATIO: Double,
+    private val IMAGE_WIDTH: Int,
+    private val IMAGE_HEIGHT: Int
 ) {
     companion object {
         const val NEW_FRAME_MATCHED = 0
@@ -175,7 +177,7 @@ class VisualOdometer2D(
         endCoordinatedB: Matrix<Double>
     ): Pair<Matrix<Double>, Matrix<Double>> {
         // Centroid
-        val actualOrigin = Pair(352.0 / 2, 288.0 / 2)
+        val actualOrigin = Pair(IMAGE_WIDTH.toDouble() / 2, IMAGE_HEIGHT.toDouble() / 2)
         val A = subtract(endCoordinatedA, actualOrigin)
         val B = subtract(endCoordinatedB, actualOrigin)
         val ACentroid = meanByColumns(A)

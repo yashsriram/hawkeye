@@ -69,7 +69,9 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
             DescriptorMatcher.create(DESCRIPTOR_MATCHER_TYPE),
             ANCHOR_FRAME_MATCHES_THRESHOLD,
             ANCHOR_TO_NEW_FRAME_MATCHES_THRESHOLD,
-            NN_DIST_RATIO
+            NN_DIST_RATIO,
+            width,
+            height
         )
     }
 

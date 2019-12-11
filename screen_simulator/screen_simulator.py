@@ -2,6 +2,7 @@ import socket
 import matplotlib.pyplot as plt
 from socket_station import SocketStation
 import sys
+import numpy as np
 
 if len(sys.argv) != 3:
     print('Usage: {} <hostip> <hostport>'.format(sys.argv[0]))
@@ -26,6 +27,8 @@ s.listen(0)                 # No extra unaccepted connections allowed
 c, addr = s.accept()
 print('client connected from ', addr)
 ss = SocketStation(c)
+pointer_origin = np.asarray([10, 10])
+ACTION_MEMORY_SIZE = 100
 
 i = 1
 while True:
@@ -41,11 +44,18 @@ while True:
         position = msg.split()
         x = float(position[0])
         y = float(position[1])
+        angle = float(position[2])
+        pointer = (np.asarray([np.cos(angle * np.pi / 180), np.sin(angle * np.pi / 180)]) * 20) + pointer_origin
         xpositions.append(x)
         ypositions.append(y)
+        if len(xpositions) > ACTION_MEMORY_SIZE:
+            xpositions = xpositions[-ACTION_MEMORY_SIZE:]
+            ypositions = ypositions[-ACTION_MEMORY_SIZE:]
+        plt.annotate(s='', xy=(pointer), xytext=(pointer_origin), arrowprops=dict(arrowstyle='->'))
         graph.set_data(ypositions, xpositions)  # update data
         plt.draw()                              # Redraw
         plt.pause(1e-17)
+        # print('Frame # = {}'.format(i), end='\r')
         i += 1
     except Exception as e:
         print(e)

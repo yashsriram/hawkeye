@@ -25,6 +25,8 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
 
     private var visualOdometer2D: VisualOdometer2D? = null
 
+    private var frameCount = 0
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_visual_odometer)
@@ -86,14 +88,18 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
     }
 
     override fun onCameraFrame(inputFrame: CameraBridgeViewBase.CvCameraViewFrame?): Mat {
+        frameCount += 1
         val inputImg = inputFrame!!.rgba()
         val status = visualOdometer2D!!.feed(inputImg)
         when (status.state) {
             VisualOdometer2D.NEW_FRAME_MATCHED -> {
-                SocketHolder.send("${status.dx.roundToInt()} ${status.dy.roundToInt()}")
+                // Send less frequently as the wireless is not able to match up
+                if (frameCount % 2 == 0) {
+                    SocketHolder.send("${status.dx.roundToInt()} ${status.dy.roundToInt()} ${status.angleInDegrees.roundToInt()}")
+                }
                 statusView.post {
                     statusView.text =
-                        "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}"
+                        "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
                 }
             }
             VisualOdometer2D.FOUND_ANCHOR -> {

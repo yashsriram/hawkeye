@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FireFly</string>
+    <string name="app_name">Fire Dragon</string>
     <string name="connect_help">Start firefly listener in your computer. The ip address and port correspond to ip address and port on which the listener listens.</string>
     <string name="port">port</string>
     <string name="ip_address">ip address</string>

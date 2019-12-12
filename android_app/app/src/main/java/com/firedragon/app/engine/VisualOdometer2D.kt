@@ -12,8 +12,8 @@ import kotlin.collections.ArrayList
 
 class Status(
     val state: Int,
-    val dx: Double,
-    val dy: Double,
+    val x: Double,
+    val y: Double,
     val angleInDegrees: Double,
     val numMatches: Int
 )
@@ -132,18 +132,19 @@ class VisualOdometer2D(
             val matA = create(A.toDoubleArray(), goodMatchesList.size, 2)
             val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
             val RT = getRotationInDegrees(matA, matB)
-            val angleInDegrees = getAngleInDegreesFromR(RT.first)
-            var dx = RT.second.getDouble(0, 0)
-            var dy = RT.second.getDouble(0, 1)
+            val angleInDegrees = -getAngleInDegreesFromR(RT.first)
+            var x = RT.second.getDouble(0, 1)
+            var y = RT.second.getDouble(0, 0)
+            // Jerk heuristic checks
             if (abs(angleInDegrees - prevStatus.angleInDegrees) > 0.1
-                && pow(dx - prevStatus.dx, 2) + pow(dy - prevStatus.dy, 2) > 100
+                && pow(x - prevStatus.x, 2) + pow(y - prevStatus.y, 2) > 100
             ) {
                 // High possibility of unwanted jerk => decrease the change in position
-                dx = prevStatus.dx
-                dy = prevStatus.dy
+                x = prevStatus.x
+                y = prevStatus.y
             }
             // Update prev status
-            val newStatus = Status(NEW_FRAME_MATCHED, dx, dy, angleInDegrees, goodMatchesList.size)
+            val newStatus = Status(NEW_FRAME_MATCHED, x, y, angleInDegrees, goodMatchesList.size)
             prevStatus = newStatus
             return newStatus
         }

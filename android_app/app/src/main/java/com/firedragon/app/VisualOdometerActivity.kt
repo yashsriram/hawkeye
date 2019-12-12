@@ -98,13 +98,13 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
             VisualOdometer2D.NEW_FRAME_MATCHED -> {
                 // Send less frequently as the wireless is not able to match up
                 if (frameCount % 2 == 0) {
-                    SocketHolder.send("${status.dx.roundToInt()} ${status.dy.roundToInt()} ${status.angleInDegrees.roundToInt()}")
+                    SocketHolder.send("${status.x.roundToInt()} ${status.y.roundToInt()} ${status.angleInDegrees.roundToInt()}")
                 }
                 statusView.post {
                     statusView.text =
-                        "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
+                        "x = ${status.x.roundToInt()}\n y = ${status.y.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
                 }
-                pathView.addNewPoint(status.dx.roundToInt().toFloat(), status.dy.roundToInt().toFloat())
+                pathView.addNewPoint(status.x.roundToInt().toFloat(), status.y.roundToInt().toFloat())
             }
             VisualOdometer2D.FOUND_ANCHOR -> {
                 val anchorBitMap = Bitmap.createBitmap(

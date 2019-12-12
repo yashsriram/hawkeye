@@ -1,10 +1,10 @@
-package com.firefly.app
+package com.firedragon.app
 
 import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import com.firefly.app.engine.VisualOdometer2D
+import com.firedragon.app.engine.VisualOdometer2D
 import kotlinx.android.synthetic.main.activity_visual_odometer.*
 import org.opencv.android.*
 import org.opencv.core.Mat

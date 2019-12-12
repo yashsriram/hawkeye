@@ -1,4 +1,4 @@
-package com.firefly.app
+package com.firedragon.app
 
 import android.content.Context
 import android.graphics.Canvas

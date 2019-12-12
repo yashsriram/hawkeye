@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="Path traced"/>
 
-    <com.firefly.app.PathView
+    <com.firedragon.app.PathView
         android:id="@+id/pathView"
         android:layout_width="match_parent"
         android:layout_height="400dp"

@@ -1,4 +1,4 @@
-package com.firefly.app
+package com.firedragon.app
 
 import android.content.Context
 import android.hardware.Sensor
@@ -7,7 +7,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
 import androidx.appcompat.app.AppCompatActivity
-import com.firefly.app.engine.InertialOdometer3D
+import com.firedragon.app.engine.InertialOdometer3D
 import kotlinx.android.synthetic.main.activity_inertial_odometer.*
 import java.text.DecimalFormat
 

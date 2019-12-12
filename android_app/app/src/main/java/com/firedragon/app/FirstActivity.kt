@@ -1,4 +1,4 @@
-package com.firefly.app
+package com.firedragon.app
 
 import android.content.Intent
 import android.os.Bundle
@@ -50,14 +50,14 @@ class FirstActivity : AppCompatActivity() {
             if (response!! == 0) {
                 Toast.makeText(
                     this@FirstActivity,
-                    "Connected to firefly listener",
+                    "Connected to firedragon listener",
                     Toast.LENGTH_SHORT
                 ).show()
                 startActivity(Intent(this@FirstActivity, VisualOdometerActivity::class.java))
             } else {
                 Toast.makeText(
                     this@FirstActivity,
-                    "Cannot connect to firefly listener",
+                    "Cannot connect to firedragon listener",
                     Toast.LENGTH_SHORT
                 ).show()
             }

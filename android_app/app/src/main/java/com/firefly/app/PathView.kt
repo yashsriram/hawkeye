@@ -11,9 +11,9 @@ import android.view.View
 class PathView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint = Paint()
     private val path = Path()
+    private var isFirstDraw = true
 
     init {
-        path.moveTo((width / 2).toFloat(), (height / 2).toFloat())
         paint.apply {
             color = Color.BLACK
             style = Paint.Style.STROKE
@@ -26,6 +26,10 @@ class PathView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (isFirstDraw) {
+            path.moveTo((width / 2).toFloat(), (height / 2).toFloat())
+            isFirstDraw = false
+        }
         canvas.drawPath(path, paint)
     }
 

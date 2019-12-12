@@ -11,7 +11,10 @@ import org.opencv.core.Mat
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
+import kotlin.math.PI
+import kotlin.math.cos
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
     private val MAX_WIDTH = 600
@@ -104,7 +107,15 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                     statusView.text =
                         "x = ${status.x.roundToInt()}\n y = ${status.y.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
                 }
-                pathView.addNewPoint(status.x.roundToInt().toFloat(), status.y.roundToInt().toFloat())
+                pathView.addNewPoint(
+                    status.x.roundToInt().toFloat(),
+                    status.y.roundToInt().toFloat()
+                )
+                orientationView.reset()
+                orientationView.addNewPoint(
+                    (20 * -sin(status.angleInDegrees * PI / 180)).toFloat(),
+                    (20 * -cos(status.angleInDegrees * PI / 180)).toFloat()
+                )
             }
             VisualOdometer2D.FOUND_ANCHOR -> {
                 val anchorBitMap = Bitmap.createBitmap(

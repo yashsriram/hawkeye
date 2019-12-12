@@ -15,7 +15,7 @@ class PathView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     init {
         paint.apply {
-            color = Color.BLACK
+            color = Color.WHITE
             style = Paint.Style.STROKE
             strokeJoin = Paint.Join.ROUND
             strokeCap = Paint.Cap.ROUND

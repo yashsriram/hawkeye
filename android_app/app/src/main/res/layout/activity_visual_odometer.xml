@@ -23,37 +23,53 @@
         android:layout_margin="10dp"
         android:contentDescription="Anchor image"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cameraView" />
 
     <TextView
         android:id="@+id/statusView"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:text="Status"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/anchorImageView" />
+        app:layout_constraintTop_toBottomOf="@id/cameraView" />
+
 
     <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Orientation "
+        app:layout_constraintBottom_toTopOf="@id/orientationView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.firedragon.app.PathView
+        android:id="@+id/orientationView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@id/pathView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center"
+        android:text="Path"
         app:layout_constraintBottom_toTopOf="@id/pathView"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Path traced"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.firedragon.app.PathView
         android:id="@+id/pathView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:background="@android:color/black"
         app:layout_constraintBottom_toTopOf="@id/anchorResetButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

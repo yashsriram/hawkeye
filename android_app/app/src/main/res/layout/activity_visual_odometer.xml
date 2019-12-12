@@ -17,31 +17,50 @@
         app:show_fps="true" />
 
     <ImageView
-        android:src="@mipmap/ic_launcher"
         android:id="@+id/anchorImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:contentDescription="Anchor image"
+        android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cameraView" />
 
     <TextView
         android:id="@+id/statusView"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         android:gravity="center"
-        style="@style/TextAppearance.AppCompat.Large"
         android:text="Status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/anchorImageView" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@id/pathView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Path traced"/>
+
+    <com.firefly.app.PathView
+        android:id="@+id/pathView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@id/anchorResetButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/anchorResetButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

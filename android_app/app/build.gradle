@@ -40,6 +40,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(path: ':openCVLibrary346')
-    compile group: "com.kyonifer", name: "koma-core-ejml", version: "0.12"
-    compile group: "com.kyonifer", name: "koma-plotting", version: "0.12"
+    implementation group: "com.kyonifer", name: "koma-core-ejml", version: "0.12"
+    implementation group: "com.kyonifer", name: "koma-plotting", version: "0.12"
 }

@@ -28,7 +28,6 @@ c, addr = s.accept()
 print('client connected from ', addr)
 ss = SocketStation(c)
 pointer_origin = np.asarray([10, 10])
-ACTION_MEMORY_SIZE = 100
 
 i = 1
 while True:
@@ -48,9 +47,6 @@ while True:
         pointer = (np.asarray([np.cos(angle * np.pi / 180), np.sin(angle * np.pi / 180)]) * 20) + pointer_origin
         xpositions.append(x)
         ypositions.append(y)
-        if len(xpositions) > ACTION_MEMORY_SIZE:
-            xpositions = xpositions[-ACTION_MEMORY_SIZE:]
-            ypositions = ypositions[-ACTION_MEMORY_SIZE:]
         plt.annotate(s='', xy=(pointer), xytext=(pointer_origin), arrowprops=dict(arrowstyle='->'))
         graph.set_data(ypositions, xpositions)  # update data
         plt.draw()                              # Redraw

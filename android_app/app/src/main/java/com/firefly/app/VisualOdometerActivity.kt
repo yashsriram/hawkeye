@@ -31,7 +31,10 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_visual_odometer)
         cameraView.setCvCameraViewListener(this)
-        anchorResetButton.setOnClickListener { visualOdometer2D!!.reset() }
+        anchorResetButton.setOnClickListener {
+            visualOdometer2D!!.reset()
+            pathView.reset()
+        }
     }
 
     private val loaderCallback = object : BaseLoaderCallback(this) {
@@ -101,6 +104,7 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                     statusView.text =
                         "dx = ${status.dx.roundToInt()}\n dy = ${status.dy.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
                 }
+                pathView.addNewPoint(status.dx.roundToInt().toFloat(), status.dy.roundToInt().toFloat())
             }
             VisualOdometer2D.FOUND_ANCHOR -> {
                 val anchorBitMap = Bitmap.createBitmap(

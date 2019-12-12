@@ -133,8 +133,15 @@ class VisualOdometer2D(
             val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
             val RT = getRotationInDegrees(matA, matB)
             val angleInDegrees = getAngleInDegreesFromR(RT.first)
-            val dx = RT.second.getDouble(0, 0)
-            val dy = RT.second.getDouble(0, 1)
+            var dx = RT.second.getDouble(0, 0)
+            var dy = RT.second.getDouble(0, 1)
+            if (abs(angleInDegrees - prevStatus.angleInDegrees) > 0.1
+                && pow(dx - prevStatus.dx, 2) + pow(dy - prevStatus.dy, 2) > 100
+            ) {
+                // High possibility of unwanted jerk => decrease the change in position
+                dx = prevStatus.dx
+                dy = prevStatus.dy
+            }
             // Update prev status
             val newStatus = Status(NEW_FRAME_MATCHED, dx, dy, angleInDegrees, goodMatchesList.size)
             prevStatus = newStatus

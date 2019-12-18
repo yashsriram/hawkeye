@@ -105,9 +105,17 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                 }
                 statusView.post {
                     statusView.text =
-                        "x = ${status.x.roundToInt()}\n y = ${status.y.roundToInt()}\n angle = ${status.angleInDegrees.roundToInt()}\n #matches = ${status.numMatches}\n frame# = ${frameCount}"
+                        "#matches = ${status.numMatches}\n" +
+                                "frame# = ${frameCount}\n" +
+                                "x median = ${status.xMedian.roundToInt()}\n" +
+                                "y median = ${status.yMedian.roundToInt()}\n" +
+                                "x = ${status.x.roundToInt()}\n" +
+                                "y = ${status.y.roundToInt()}\n" +
+                                "angle = ${status.angleInDegrees.roundToInt()}\n"
                 }
                 pathView.addNewPoint(
+                    status.xMedian.roundToInt().toFloat(),
+                    status.yMedian.roundToInt().toFloat(),
                     status.x.roundToInt().toFloat(),
                     status.y.roundToInt().toFloat()
                 )

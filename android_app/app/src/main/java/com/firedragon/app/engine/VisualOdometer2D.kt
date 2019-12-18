@@ -8,14 +8,18 @@ import org.opencv.core.*
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
 import org.opencv.features2d.FeatureDetector
+import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class Status(
     val state: Int,
     val x: Double,
     val y: Double,
     val angleInDegrees: Double,
-    val numMatches: Int
+    val numMatches: Int,
+    val xMedian: Double,
+    val yMedian: Double
 )
 
 class VisualOdometer2D(
@@ -39,7 +43,7 @@ class VisualOdometer2D(
     private var anchorFrame = Mat()
     private var anchorFrameKeyPoints = MatOfKeyPoint()
     private var anchorFrameDescriptors = MatOfKeyPoint()
-    private var prevStatus = Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0)
+    private var prevStatus = Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0, 0.0, 0.0)
 
     init {
         assert(ANCHOR_FRAME_MATCHES_THRESHOLD > 0)
@@ -70,11 +74,11 @@ class VisualOdometer2D(
         featureDetector.detect(frame1, anchorFrameKeyPoints)
         val numKPs = anchorFrameKeyPoints.toList().size
         if (numKPs < ANCHOR_FRAME_MATCHES_THRESHOLD) {
-            return Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0)
+            return Status(ANCHOR_NOT_FOUND, 0.0, 0.0, 0.0, 0, 0.0, 0.0)
         } else {
             descriptorExtractor.compute(frame1, anchorFrameKeyPoints, anchorFrameDescriptors)
             this.anchorFrame = frame1.clone()
-            return Status(FOUND_ANCHOR, 0.0, 0.0, 0.0, numKPs)
+            return Status(FOUND_ANCHOR, 0.0, 0.0, 0.0, numKPs, 0.0, 0.0)
         }
     }
 
@@ -108,7 +112,7 @@ class VisualOdometer2D(
         }
         if (goodMatchesList.size < ANCHOR_TO_NEW_FRAME_MATCHES_THRESHOLD) {
             // If good matches are too less => anchor image found
-            return Status(NEW_FRAME_NOT_MATCHED, 0.0, 0.0, 0.0, 0)
+            return Status(NEW_FRAME_NOT_MATCHED, 0.0, 0.0, 0.0, 0, 0.0, 0.0)
         } else {
             // Get good keypoints from good matches
             val anchorFrameKeyPointsList = anchorFrameKeyPoints.toList()
@@ -128,7 +132,12 @@ class VisualOdometer2D(
                 B.add(newFrameGoodKeyPoint.x)
                 B.add(newFrameGoodKeyPoint.y)
             }
-            // Calculate rotation and translation
+            // Calculate translation using median method
+            Arrays.sort(dxs)
+            Arrays.sort(dys)
+            val xMedian = median(dys)
+            val yMedian = median(dxs)
+            // Calculate rotation and translation using co-variance method
             val matA = create(A.toDoubleArray(), goodMatchesList.size, 2)
             val matB = create(B.toDoubleArray(), goodMatchesList.size, 2)
             val RT = getRotationInDegrees(matA, matB)
@@ -144,7 +153,7 @@ class VisualOdometer2D(
                 y = prevStatus.y
             }
             // Update prev status
-            val newStatus = Status(NEW_FRAME_MATCHED, x, y, angleInDegrees, goodMatchesList.size)
+            val newStatus = Status(NEW_FRAME_MATCHED, x, y, angleInDegrees, goodMatchesList.size, xMedian, yMedian)
             prevStatus = newStatus
             return newStatus
         }

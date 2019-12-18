@@ -59,8 +59,7 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Path"
+        android:text="Path: Green = median White = covariance"
         app:layout_constraintBottom_toTopOf="@id/pathView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

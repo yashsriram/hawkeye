@@ -99,10 +99,6 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
         val status = visualOdometer2D!!.feed(inputImg)
         when (status.state) {
             VisualOdometer2D.NEW_FRAME_MATCHED -> {
-                // Send less frequently as the wireless is not able to match up
-                if (frameCount % 2 == 0) {
-                    SocketHolder.send("${status.x.roundToInt()} ${status.y.roundToInt()} ${status.angleInDegrees.roundToInt()}")
-                }
                 statusView.post {
                     statusView.text =
                         "#matches = ${status.numMatches}\n" +
@@ -133,7 +129,6 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
                 )
                 Utils.matToBitmap(inputImg, anchorBitMap)
                 anchorImageView.post { anchorImageView.setImageBitmap(anchorBitMap) }
-                SocketHolder.send("reset")
                 statusView.post { statusView.text = "Found Anchor Image" }
             }
             VisualOdometer2D.ANCHOR_NOT_FOUND -> {

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.activities.FirstActivity">
+    tools:context=".FirstActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,50 +12,17 @@
         android:layout_margin="40dp"
         android:orientation="vertical">
 
-        <TextView
-            style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connect_to_a_computer" />
-
-        <EditText
-            android:text="192.168.1.10"
-            android:id="@+id/screenIPAddressView"
+        <Button
+            android:id="@+id/goToVisualOdometerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ip_address"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/screenPortView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/port"
-            android:inputType="number"
-            android:text="8000" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connect_help" />
+            android:text="Visual odometer" />
 
         <Button
-            android:id="@+id/tetheredVisualOdometerBtn"
+            android:id="@+id/goToInertialOdometerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tethered_visual_odometer" />
-
-        <Button
-            android:id="@+id/untetheredVisualOdometerBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/untethered_visual_odometer" />
-
-        <Button
-            android:id="@+id/gotoInertialOdometerBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/untethered_inertial_odometer" />
+            android:text="Inertial Odometer" />
 
     </LinearLayout>
 

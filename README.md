@@ -5,3 +5,9 @@
 ## References
 - <https://www.sciencedirect.com/science/article/abs/pii/S0263224104000417>
 - <https://www.sciencedirect.com/science/article/pii/S1474667016426261>
+
+- [x] remove unnecessary opencv native libs.
+- [x] remove unused test files.
+- [ ] decrease repo size.
+- [ ] remove socket station, screen\_simulator and all related stuff.
+- [ ] improve name of project.

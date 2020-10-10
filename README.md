@@ -50,7 +50,7 @@
 | Drawing a word (CV) by hand. (Translation only) | ![](./github/cv.gif) |
 | Rotating 90 degrees by hand. (Rotation only) | ![](./github/90-rot.gif) |
 | Drawing an arc by hand. (Translation + Rotation) | ![](./github/arc.gif) |
-| Occlusion recovery | ![](./github/occlusion.gif) |
+| The device is occuluded rotated by 90 degrees. On unocclusion orientation is immediately estimated to be at 90 degrees. | ![](./github/occlusion.gif) |
 
 ## roadmap
 - [x] remove unnecessary opencv native libs.

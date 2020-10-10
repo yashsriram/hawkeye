@@ -1,7 +1,7 @@
 # hawkeye
 
 ## description
-- A simple real-time 2D pose tracking algorithm using visual odometry.
+- A simple real-time 2D pose tracking algorithm using monocular visual odometry.
 - Designed to be deployed in a mobile phone to use it as an external-mouse-like controller.
 - A rudimentary inertial odometer using accelerometer with eularian integration is provided as a control.
 

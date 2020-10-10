@@ -19,6 +19,7 @@
 ### references
 - <https://www.sciencedirect.com/science/article/abs/pii/S0263224104000417>
 - <https://www.sciencedirect.com/science/article/pii/S1474667016426261>
+- <http://nghiaho.com/?page_id=671>
 
 ## code
 - This is a typical android project written in `Kotlin`.

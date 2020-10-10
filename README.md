@@ -39,6 +39,45 @@
 
 ## demonstration
 
+- If device at rest no translation or rotation is detected.
+
+![](./github/at-rest.gif)
+
+- Drawing a line by hand. (Translation only)
+
+![](./github/line.gif)
+
+- Drawing a square by hand. (Translation only)
+
+![](./github/square.gif)
+
+- Drawing a star by hand. (Translation only)
+
+![](./github/star.gif)
+
+- Drawing a circle by hand. (Translation only)
+
+![](./github/circle.gif)
+
+- Drawing a spiral by hand. (Translation only)
+
+![](./github/spiral.gif)
+
+- Drawing a word (CV) by hand. (Translation only)
+
+![](./github/cv.gif)
+
+- Rotating 90 degrees by hand. (Rotation only)
+
+![](./github/90-rot.gif)
+
+- Drawing an arc by hand. (Translation + Rotation)
+
+![](./github/arc.gif)
+
+- Occlusion recovery.
+
+![](./github/occlusion.gif)
 
 ## roadmap
 - [x] remove unnecessary opencv native libs.

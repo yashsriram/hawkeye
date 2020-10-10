@@ -3,7 +3,7 @@
 ## description
 - A simple real-time 2D pose tracking algorithm using visual odometry.
 - Designed to be deployed in a mobile phone to use it as an external-mouse-like controller.
-- A rudimentary intertial odometer using accelerometer with eularian integration is provided as a control.
+- A rudimentary inertial odometer using accelerometer with eularian integration is provided as a control.
 
 ### assumptions
 - The device is constrained to have only translation and rotation in a 2D space (ex. on a computer desk).
@@ -16,7 +16,7 @@
 - The speed at which device moves has no effect on tracking as change in pose is only a function of first frame and Nth frame.
 - The above point also means that there will be no drift accumulation during the movements.
 
-### References
+### references
 - <https://www.sciencedirect.com/science/article/abs/pii/S0263224104000417>
 - <https://www.sciencedirect.com/science/article/pii/S1474667016426261>
 
@@ -24,10 +24,12 @@
 - [x] remove unnecessary opencv native libs.
 - [x] remove unused test files.
 - [x] remove socket station, screen\_simulator and all related stuff.
+- [x] remove cv.json.
+- [x] flatten engine/ dir.
+- [x] remove baseline algorithm vis.
+- [x] fix the anchor and video feed vis.
 - [ ] decrease repo size.
 - [ ] improve name of project.
-- [ ] remove cv.json.
-- [ ] flatten engine/ dir.
 
 ## code
 - This is a typical android project written in `Kotlin`.

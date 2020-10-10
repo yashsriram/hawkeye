@@ -4,9 +4,9 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import com.firedragon.app.engine.VisualOdometer2D
 import kotlinx.android.synthetic.main.activity_visual_odometer.*
 import org.opencv.android.*
+import org.opencv.core.Core
 import org.opencv.core.Mat
 import org.opencv.features2d.DescriptorExtractor
 import org.opencv.features2d.DescriptorMatcher
@@ -15,6 +15,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
+
 
 class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
     private val MAX_WIDTH = 600
@@ -123,11 +124,14 @@ class VisualOdometerActivity : Activity(), CameraBridgeViewBase.CvCameraViewList
             }
             VisualOdometer2D.FOUND_ANCHOR -> {
                 val anchorBitMap = Bitmap.createBitmap(
-                    inputImg.cols(),
                     inputImg.rows(),
+                    inputImg.cols(),
                     Bitmap.Config.ARGB_8888
                 )
-                Utils.matToBitmap(inputImg, anchorBitMap)
+                val rotatedAndFlipped = Mat(inputImg.cols(), inputImg.rows(), inputImg.type())
+                Core.rotate(inputImg, rotatedAndFlipped, Core.ROTATE_90_COUNTERCLOCKWISE)
+                Core.flip(rotatedAndFlipped, rotatedAndFlipped, 1)
+                Utils.matToBitmap(rotatedAndFlipped, anchorBitMap)
                 anchorImageView.post { anchorImageView.setImageBitmap(anchorBitMap) }
                 statusView.post { statusView.text = "Found Anchor Image" }
             }

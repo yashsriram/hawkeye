@@ -7,7 +7,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
 import androidx.appcompat.app.AppCompatActivity
-import com.firedragon.app.engine.InertialOdometer3D
 import kotlinx.android.synthetic.main.activity_inertial_odometer.*
 import java.text.DecimalFormat
 

@@ -1,4 +1,4 @@
-package com.firedragon.app
+package com.hawkeye.app
 
 class InertialOdometer3D(private var vel: Double,
                          private var pos: Double

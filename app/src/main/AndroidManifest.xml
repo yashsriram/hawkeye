@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.firedragon.app">
+    package="com.hawkeye.app">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -27,15 +26,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.firedragon.app.FirstActivity">
+        <activity android:name="com.hawkeye.app.FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.firedragon.app.VisualOdometerActivity" />
-        <activity android:name="com.firedragon.app.InertialOdometerActivity" />
+        <activity android:name="com.hawkeye.app.VisualOdometerActivity" />
+        <activity android:name="com.hawkeye.app.InertialOdometerActivity" />
     </application>
 
 </manifest>

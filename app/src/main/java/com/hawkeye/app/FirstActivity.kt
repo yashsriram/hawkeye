@@ -1,4 +1,4 @@
-package com.firedragon.app
+package com.hawkeye.app
 
 import android.content.Intent
 import android.os.Bundle

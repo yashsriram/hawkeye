@@ -1,4 +1,4 @@
-# firedragon
+# hawkeye
 
 ## description
 - A simple real-time 2D pose tracking algorithm using visual odometry.
@@ -20,17 +20,6 @@
 - <https://www.sciencedirect.com/science/article/abs/pii/S0263224104000417>
 - <https://www.sciencedirect.com/science/article/pii/S1474667016426261>
 
-## roadmap
-- [x] remove unnecessary opencv native libs.
-- [x] remove unused test files.
-- [x] remove socket station, screen\_simulator and all related stuff.
-- [x] remove cv.json.
-- [x] flatten engine/ dir.
-- [x] remove baseline algorithm vis.
-- [x] fix the anchor and video feed vis.
-- [ ] decrease repo size.
-- [ ] improve name of project.
-
 ## code
 - This is a typical android project written in `Kotlin`.
 - `opencv` library is used for feature extraction, description and matching.
@@ -46,6 +35,18 @@
 - Install the app in a device with front camera.
 - Give camera permission for the app from the device settings.
 - Place the device on a 2D plane facing a static ceiling and reset the visual odometer.
-- Now on moving the device it uses the video feed to track its 2D pose and visualizes it on screen.
+- On moving the device now, it uses the video feed to track its 2D pose and visualizes it on screen.
 
 ## demonstration
+
+
+## roadmap
+- [x] remove unnecessary opencv native libs.
+- [x] remove unused test files.
+- [x] remove socket station, screen\_simulator and all related stuff.
+- [x] remove cv.json.
+- [x] flatten engine/ dir.
+- [x] remove baseline algorithm vis.
+- [x] fix the anchor and video feed vis.
+- [x] improve name of project.
+- [ ] decrease repo size.

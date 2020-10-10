@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/orientationView"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.firedragon.app.PathView
+    <com.hawkeye.app.PathView
         android:id="@+id/orientationView"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -64,7 +64,7 @@
     <!--        app:layout_constraintEnd_toEndOf="parent"-->
     <!--        app:layout_constraintStart_toStartOf="parent" />-->
 
-    <com.firedragon.app.PathView
+    <com.hawkeye.app.PathView
         android:id="@+id/pathView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
